@@ -1,10 +1,7 @@
 use {
     dotenv::dotenv,
     hyper::{
-        // Following functions are used by Hyper to handle a `Request`
-        // and returning a `Response` in an asynchronous manner by using a Future
         service::{make_service_fn, service_fn},
-        // Miscellaneous types from Hyper for working with HTTP.
         Body,
         Client,
         Request,
@@ -13,25 +10,22 @@ use {
         Uri,
     },
     std::env,
+    std::collections::HashMap,
     std::net::SocketAddr,
+    std::str::FromStr
 };
 
-async fn serve_req(_req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
-    // Always return successfully with a response containing a body with
-    // a friendly greeting ;)
-    Ok(Response::new(Body::from("hello, world!")))
+async fn serve_req(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
+    println!("{}", req.uri());
+    let url_str = "http://www.google.com";
+    let url = url_str.parse::<Uri>().expect("failed to parse url");
+    let res = Client::new().get(url).await?;
+    Ok(res)
 }
 
 async fn run_server(addr: SocketAddr) {
     println!("Listening on http://{}", addr);
-
-    // Create a server bound on the provided address
     let serve_future = Server::bind(&addr)
-        // Serve requests using our `async serve_req` function.
-        // `serve` takes a closure which returns a type implementing the
-        // `Service` trait. `service_fn` returns a value implementing the
-        // `Service` trait, and accepts a closure which goes from request
-        // to a future of the response.
         .serve(make_service_fn(|_| {
             async {
                 {
@@ -40,8 +34,6 @@ async fn run_server(addr: SocketAddr) {
             }
         }));
 
-    // Wait for the server to complete serving or exit with an error.
-    // If an error occurred, print it to stderr.
     if let Err(e) = serve_future.await {
         eprintln!("server error: {}", e);
     }
@@ -50,21 +42,10 @@ async fn run_server(addr: SocketAddr) {
 #[tokio::main]
 async fn main() {
     dotenv().ok();
-
-    for (key, value) in env::vars() {
-        println!("Env {}, Var {}", key, value)
-    }
-
     let PORT = env::var("PORT")
-        .expect("4004")
+        .unwrap_or("4004".to_string())
         .parse::<u16>()
-        .expect("Invalid port given");
-
-    // Set the address to run our socket on.
+        .expect("Port must be a valid integer");
     let addr = SocketAddr::from(([127, 0, 0, 1], PORT));
-
-    // Call our `run_server` function, which returns a future.
-    // As with every `async fn`, for `run_server` to do anything,
-    // the returned future needs to be run using `await`;
     run_server(addr).await;
 }
