@@ -1,7 +1,4 @@
-use {
-    serde::{Deserialize, Serialize},
-    serde_json,
-};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Employee {

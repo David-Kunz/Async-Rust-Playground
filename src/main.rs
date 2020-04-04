@@ -1,9 +1,8 @@
 use {
     hyper::{
         service::{make_service_fn, service_fn},
-        Body, Client, Request, Response, Server, Uri,
+        Body, Request, Response, Server,
     },
-    serde::{Deserialize, Serialize},
     serde_json,
     std::net::SocketAddr,
 };
