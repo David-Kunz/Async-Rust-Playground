@@ -3,11 +3,10 @@ use {
         service::{make_service_fn, service_fn},
         Body, Client, Request, Response, Server, Uri,
     },
+    serde::{Deserialize, Serialize},
+    serde_json,
     std::net::SocketAddr,
-    serde_json
 };
-use serde::{Serialize, Deserialize};
-
 mod config;
 mod entity;
 

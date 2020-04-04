@@ -1,6 +1,6 @@
 use {async_std::fs, serde::Deserialize, serde_json};
 
-#[derive(Deserialize,Debug)]
+#[derive(Deserialize, Debug)]
 pub struct Config {
     #[serde(default = "default_port")]
     pub port: u16,
