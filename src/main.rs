@@ -7,17 +7,12 @@ use {
     std::net::SocketAddr,
 };
 mod config;
-mod entity;
+mod handler;
 
 async fn serve_req(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
     println!("{}", req.uri());
-    let employee = entity::Employee {
-        name: "David Kunz".to_string(),
-        birth_year: 1986,
-        employment_type: entity::EmploymentType::Permanent,
-    };
-    let body = serde_json::to_string(&employee).unwrap();
-
+    let res = handler::get_res();
+    let body = serde_json::to_string(&res).unwrap();
     Ok(Response::builder()
         .header("Content-Type", "application/json")
         .body(Body::from(body))
