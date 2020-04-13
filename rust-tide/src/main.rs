@@ -5,11 +5,6 @@ use std::vec::Vec;
 use tide::Server;
 
 #[derive(Deserialize, Serialize)]
-struct Cat {
-    name: String,
-}
-
-#[derive(Deserialize, Serialize)]
 struct Entity {
     name: String,
     age: i16,
