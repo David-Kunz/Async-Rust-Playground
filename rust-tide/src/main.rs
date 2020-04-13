@@ -22,7 +22,7 @@ fn determine_entity<'a>(uri: &tide::http::Uri, entities: &'a Vec<Entity>) -> Opt
         if idx == 0 {
             continue;
         }
-        if c != '(' {
+        if c != '(' && c != '/'{
             entity_c.push(c);
         }
         else {
@@ -34,6 +34,7 @@ fn determine_entity<'a>(uri: &tide::http::Uri, entities: &'a Vec<Entity>) -> Opt
 }
 
 fn main() -> io::Result<()> {
+    // TODO: Load from external csn file
     let entities = vec![
         Entity {
             name: "entity1".to_string(),
