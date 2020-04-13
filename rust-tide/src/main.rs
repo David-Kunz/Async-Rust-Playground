@@ -7,14 +7,13 @@ use tide::Server;
 #[derive(Deserialize, Serialize)]
 struct Entity {
     name: String,
-    age: i16,
     children: Vec<SubEntity>,
 }
+
 
 #[derive(Deserialize, Serialize)]
 struct SubEntity {
     sub_name: String,
-    sub_age: i16,
 }
 
 fn determine_entity<'a>(uri: &tide::http::Uri, entities: &'a Vec<Entity>) -> Option<&'a Entity>{
@@ -38,18 +37,15 @@ fn main() -> io::Result<()> {
     let entities = vec![
         Entity {
             name: "entity1".to_string(),
-            age: 1,
-            children: vec![SubEntity { sub_name: "sub11".to_string(), sub_age: 11}, SubEntity { sub_name: "sub12".to_string(), sub_age: 12}]
+            children: vec![SubEntity { sub_name: "sub11".to_string()}, SubEntity { sub_name: "sub12".to_string()}]
         },
         Entity {
             name: "entity2".to_string(),
-            age: 2,
-            children: vec![SubEntity { sub_name: "sub21".to_string(), sub_age: 21}, SubEntity { sub_name: "sub22".to_string(), sub_age: 22}]
+            children: vec![SubEntity { sub_name: "sub21".to_string()}, SubEntity { sub_name: "sub22".to_string()}]
         },
         Entity {
             name: "entity3".to_string(),
-            age: 3,
-            children: vec![SubEntity { sub_name: "sub31".to_string(), sub_age: 31}, SubEntity { sub_name: "sub32".to_string(), sub_age: 32}]
+            children: vec![SubEntity { sub_name: "sub31".to_string()}, SubEntity { sub_name: "sub32".to_string()}]
         },
     ];
     task::block_on(async {
