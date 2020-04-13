@@ -13,7 +13,27 @@ struct Entity {
 #[derive(Deserialize, Serialize)]
 struct Element {
     name: String,
+    el_type: ElementType,
     is_key: bool,
+}
+
+#[derive(Deserialize, Serialize)]
+enum ElementType {
+    UUID,
+    Boolean,
+    Integer,
+    Integer64,
+    Decimal,
+    DecimalFloat,
+    Double,
+    Date,
+    Time,
+    DateTime,
+    Timestamp,
+    String,
+    Binary,
+    LargeBinary,
+    LargeString,
 }
 
 fn determine_entity<'a>(uri: &tide::http::Uri, entities: &'a Vec<Entity>) -> Option<&'a Entity> {
@@ -40,11 +60,13 @@ fn main() -> io::Result<()> {
             elements: vec![
                 Element {
                     name: "sub11".to_string(),
+                    el_type: ElementType::UUID,
                     is_key: true,
                 },
                 Element {
                     name: "sub12".to_string(),
                     is_key: false,
+                    el_type: ElementType::String,
                 },
             ],
         },
@@ -54,10 +76,12 @@ fn main() -> io::Result<()> {
                 Element {
                     name: "sub21".to_string(),
                     is_key: true,
+                    el_type: ElementType::UUID,
                 },
                 Element {
                     name: "sub22".to_string(),
                     is_key: false,
+                    el_type: ElementType::Integer,
                 },
             ],
         },
@@ -67,10 +91,12 @@ fn main() -> io::Result<()> {
                 Element {
                     name: "sub31".to_string(),
                     is_key: true,
+                    el_type: ElementType::UUID,
                 },
                 Element {
                     name: "sub32".to_string(),
                     is_key: false,
+                    el_type: ElementType::Integer64,
                 },
             ],
         },
