@@ -17,20 +17,20 @@ struct SubEntity {
     sub_age: i16,
 }
 
-fn determineEntity<'a>(uri: &tide::http::Uri, entities: &'a Vec<Entity>) -> Option<&'a Entity>{
-    let mut entityC = vec![];
+fn determine_entity<'a>(uri: &tide::http::Uri, entities: &'a Vec<Entity>) -> Option<&'a Entity>{
+    let mut entity_c = vec![];
     for (idx, c) in uri.path().chars().enumerate() {
         if idx == 0 {
             continue;
         }
         if c != '(' {
-            entityC.push(c);
+            entity_c.push(c);
         }
         else {
             break;
         }
     }
-    let entity: String = entityC.iter().collect();
+    let entity: String = entity_c.iter().collect();
     entities.iter().find(|e| e.name == entity)
 }
 
@@ -56,7 +56,7 @@ fn main() -> io::Result<()> {
         let mut app = Server::with_state(entities);
 
         app.at("/")
-            .get(|req: tide::Request<Vec<Entity>>| async move {
+            .get(|_req: tide::Request<Vec<Entity>>| async move {
                 tide::Response::new(200).body_string("Please use proper routes.".to_string())
             });
 
@@ -64,7 +64,7 @@ fn main() -> io::Result<()> {
             .get(|req: tide::Request<Vec<Entity>>| async move {
                 let uri = req.uri();
 
-                let option_entity = determineEntity(uri, req.state());
+                let option_entity = determine_entity(uri, req.state());
                 if option_entity.is_none() {
                     return tide::Response::new(404).body_string("404, not found".to_string());
                 }
